@@ -11,3 +11,5 @@
 /memory
 .github/agents/bmad-*
 .github/prompts/bmad-*
+__pycache__/
+*.pyc
