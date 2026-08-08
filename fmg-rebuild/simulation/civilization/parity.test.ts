@@ -16,10 +16,10 @@ describe("Names, Heraldry, & Diplomacy Generators", () => {
 
   it("should output valid SVG emblems for flags and shields", () => {
     const emblem = generateEmblem("heraldry-seed");
-    expect(emblem).toContain("<svg");
-    expect(emblem).toContain("viewBox=\"0 0 100 100\"");
-    expect(emblem).toContain("clip-path");
-    expect(emblem).toContain("</svg>");
+    expect(emblem.includes("<svg")).toBe(true);
+    expect(emblem.includes("viewBox=\"0 0 100 100\"")).toBe(true);
+    expect(emblem.includes("clip-path")).toBe(true);
+    expect(emblem.includes("</svg>")).toBe(true);
   });
 
   it("should generate a consistent pairwise diplomacy matrix", () => {

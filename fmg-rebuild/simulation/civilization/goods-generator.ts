@@ -80,6 +80,7 @@ export interface Good {
   tags: string[];
   value: number;
   unit: string;
+  type: "raw" | "manufactured";
 
   // ui
   icon: string;
@@ -111,7 +112,8 @@ type GoodData = Omit<Good, "i"> & { recipes?: Record<string, number>[] };
 const GOODS_DATA: GoodData[] = [
   {
     name: "Wood",
-    tags: ["construction", "fuel"],
+    tags: ["construction", "fuel", "raw"],
+    type: "raw",
     icon: "good-wood",
     color: "#966F33",
     value: 1,
@@ -124,7 +126,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Stone",
-    tags: ["construction"],
+    tags: ["construction", "raw"],
+    type: "raw",
     icon: "good-stone",
     color: "#979EA2",
     value: 2,
@@ -133,11 +136,12 @@ const GOODS_DATA: GoodData[] = [
     unit: "pallet",
     demandCoverage: { construction: 1 },
     multipliers: { cultureType: { Hunting: 0.6, Nomadic: 0.6 } },
-    biomeOutput: { 1: 0.1, 2: 0.1 }
+    biomeOutput: { 1: 0.05, 2: 0.05 }
   },
   {
     name: "Marble",
-    tags: ["construction", "luxury"],
+    tags: ["construction", "luxury", "raw"],
+    type: "raw",
     icon: "good-marble",
     color: "#d6d0bf",
     value: 6,
@@ -149,7 +153,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Iron",
-    tags: ["ore", "military"],
+    tags: ["ore", "military", "raw"],
+    type: "raw",
     icon: "good-iron",
     color: "#5D686E",
     value: 3,
@@ -161,7 +166,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Copper",
-    tags: ["ore"],
+    tags: ["ore", "raw"],
+    type: "raw",
     icon: "good-copper",
     color: "#b87333",
     value: 4,
@@ -172,7 +178,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Tin",
-    tags: ["ore"],
+    tags: ["ore", "raw"],
+    type: "raw",
     icon: "good-tin",
     color: "#454343",
     value: 4,
@@ -183,7 +190,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Silver",
-    tags: ["ore", "luxury"],
+    tags: ["ore", "luxury", "raw"],
+    type: "raw",
     icon: "good-silver",
     color: "#C0C0C0",
     value: 8,
@@ -194,7 +202,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Gold",
-    tags: ["ore", "luxury"],
+    tags: ["ore", "luxury", "raw"],
+    type: "raw",
     icon: "good-gold",
     color: "#ffd700",
     value: 15,
@@ -205,7 +214,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Grain",
-    tags: ["food"],
+    tags: ["food", "raw"],
+    type: "raw",
     icon: "good-grain",
     color: "#F5DEB3",
     value: 1,
@@ -218,7 +228,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Cattle",
-    tags: ["food"],
+    tags: ["food", "raw"],
+    type: "raw",
     icon: "good-cattle",
     color: "#56b000",
     value: 2,
@@ -231,11 +242,12 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Fish",
-    tags: ["food", "aquatic"],
+    tags: ["food", "aquatic", "raw"],
+    type: "raw",
     icon: "good-fish",
     color: "#7fcdff",
     value: 1,
-    chance: 2,
+    chance: 4,
     distribution: 'shore(-1) && (type("ocean", "freshwater", "salt") || (river() && shore(1, 2)))',
     unit: "wain",
     demandCoverage: { food: 1 },
@@ -243,7 +255,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Game",
-    tags: ["food"],
+    tags: ["food", "raw"],
+    type: "raw",
     icon: "good-game",
     color: "#c38a8a",
     value: 2,
@@ -252,11 +265,12 @@ const GOODS_DATA: GoodData[] = [
     unit: "wain",
     demandCoverage: { food: 1 },
     multipliers: { cultureType: { Naval: 0.6, Nomadic: 1.4, Hunting: 2 } },
-    biomeOutput: { 3: 0.02, 4: 0.02, 5: 0.04, 6: 0.04, 7: 0.04, 8: 0.04, 9: 0.08 }
+    biomeOutput: { 3: 0.01, 4: 0.01, 5: 0.02, 6: 0.02, 7: 0.02, 8: 0.02, 9: 0.05 }
   },
   {
     name: "Wine",
-    tags: ["food", "luxury"],
+    tags: ["food", "luxury", "raw"],
+    type: "raw",
     icon: "good-wine",
     color: "#963e48",
     value: 2,
@@ -269,20 +283,22 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Olives",
-    tags: ["food"],
+    tags: ["food", "raw"],
+    type: "raw",
     icon: "good-olives",
     color: "#BDBD7D",
     value: 2,
     chance: 3,
-    distribution: "biome(6) || (biome(4) && random(50) && river())",
+    distribution: "biome(3) && shore(1, 2)",
     unit: "barrel",
     demandCoverage: { food: 1 },
     multipliers: { cultureType: { Generic: 0.8, Nomadic: 0.5 } },
-    biomeOutput: { 6: 0.1 }
+    biomeOutput: { 3: 0.1 }
   },
   {
     name: "Honey",
-    tags: ["food", "preservative"],
+    tags: ["food", "preservative", "raw"],
+    type: "raw",
     icon: "good-honey",
     color: "#DCBC66",
     value: 2,
@@ -295,7 +311,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Salt",
-    tags: ["preservative", "mineral"],
+    tags: ["preservative", "mineral", "raw"],
+    type: "raw",
     icon: "good-salt",
     color: "#E5E4E5",
     value: 2,
@@ -308,7 +325,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Dates",
-    tags: ["food"],
+    tags: ["food", "raw"],
+    type: "raw",
     icon: "good-dates",
     color: "#dbb2a3",
     value: 2,
@@ -321,7 +339,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Horses",
-    tags: ["supply", "military"],
+    tags: ["supply", "military", "raw"],
+    type: "raw",
     icon: "good-horses",
     color: "#ba7447",
     value: 5,
@@ -330,11 +349,12 @@ const GOODS_DATA: GoodData[] = [
     unit: "head",
     demandCoverage: { utilities: 0.6, military: 0.4 },
     multipliers: { cultureType: { Nomadic: 2 } },
-    biomeOutput: { 4: 0.05 }
+    biomeOutput: { 4: 0.01 }
   },
   {
     name: "Elephants",
-    tags: ["supply", "military"],
+    tags: ["supply", "military", "raw"],
+    type: "raw",
     icon: "good-elephants",
     color: "#C5CACD",
     value: 7,
@@ -346,7 +366,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Camels",
-    tags: ["supply", "military"],
+    tags: ["supply", "military", "raw"],
+    type: "raw",
     icon: "good-camels",
     color: "#C19A6B",
     value: 5,
@@ -359,7 +380,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Hemp",
-    tags: ["clothing", "naval"],
+    tags: ["clothing", "naval", "raw"],
+    type: "raw",
     icon: "good-hemp",
     color: "#069a06",
     value: 1,
@@ -371,7 +393,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Pearls",
-    tags: ["luxury", "aquatic"],
+    tags: ["luxury", "aquatic", "raw"],
+    type: "raw",
     icon: "good-pearls",
     color: "#EAE0C8",
     value: 13,
@@ -383,7 +406,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Gemstones",
-    tags: ["luxury", "mineral"],
+    tags: ["luxury", "mineral", "raw"],
+    type: "raw",
     icon: "good-gemstones",
     color: "#e463e4",
     value: 15,
@@ -395,7 +419,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Dyes",
-    tags: ["luxury"],
+    tags: ["luxury", "raw"],
+    type: "raw",
     icon: "good-dyes",
     color: "#fecdea",
     value: 5,
@@ -406,7 +431,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Incense",
-    tags: ["luxury", "ritual"],
+    tags: ["luxury", "ritual", "raw"],
+    type: "raw",
     icon: "good-incense",
     color: "#ebe5a7",
     value: 10,
@@ -417,7 +443,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Silk",
-    tags: ["luxury", "clothing"],
+    tags: ["luxury", "clothing", "raw"],
+    type: "raw",
     icon: "good-silk",
     color: "#e0f0f8",
     value: 9,
@@ -429,10 +456,11 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Spices",
-    tags: ["luxury"],
+    tags: ["luxury", "raw"],
+    type: "raw",
     icon: "good-spices",
     color: "#e99c75",
-    value: 14,
+    value: 15,
     chance: 2,
     distribution: "biome(7)",
     unit: "chest",
@@ -441,7 +469,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Amber",
-    tags: ["luxury"],
+    tags: ["luxury", "raw"],
+    type: "raw",
     icon: "good-amber",
     color: "#e68200",
     value: 7,
@@ -453,7 +482,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Furs",
-    tags: ["clothing", "luxury"],
+    tags: ["clothing", "luxury", "raw"],
+    type: "raw",
     icon: "good-furs",
     color: "#8a5e51",
     value: 4,
@@ -462,11 +492,12 @@ const GOODS_DATA: GoodData[] = [
     unit: "pelt",
     demandCoverage: { luxury: 0.5, utilities: 0.3 },
     multipliers: { cultureType: { Hunting: 2 } },
-    biomeOutput: { 9: 0.025, 10: 0.025, 6: 0.025, 8: 0.025, 12: 0.025 }
+    biomeOutput: { 9: 0.02, 10: 0.02, 6: 0.02, 8: 0.02, 12: 0.02 }
   },
   {
     name: "Sheep",
-    tags: ["clothing"],
+    tags: ["clothing", "raw"],
+    type: "raw",
     icon: "good-sheep",
     color: "#53b574",
     value: 2,
@@ -479,10 +510,11 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Slaves",
-    tags: ["supply"],
+    tags: ["supply", "raw"],
+    type: "raw",
     icon: "good-slaves",
     color: "#757575",
-    value: 7,
+    value: 8,
     chance: 2,
     distribution: "shore(1) && minHabitability(1) && !habitability()",
     unit: "slave",
@@ -491,7 +523,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Tar",
-    tags: ["naval"],
+    tags: ["naval", "manufactured"],
+    type: "manufactured",
     icon: "good-tar",
     color: "#727272",
     value: 3,
@@ -503,7 +536,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Saltpeter",
-    tags: ["military", "mineral"],
+    tags: ["military", "mineral", "raw"],
+    type: "raw",
     icon: "good-saltpeter",
     color: "#e6e3e3",
     value: 2,
@@ -514,7 +548,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Coal",
-    tags: ["fuel"],
+    tags: ["fuel", "manufactured"],
+    type: "manufactured",
     icon: "good-coal",
     color: "#5a6a75",
     value: 3,
@@ -526,7 +561,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Oil",
-    tags: ["fuel"],
+    tags: ["fuel", "manufactured"],
+    type: "manufactured",
     icon: "good-oil",
     color: "#565656",
     value: 3,
@@ -538,7 +574,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Mahogany",
-    tags: ["luxury"],
+    tags: ["luxury", "raw"],
+    type: "raw",
     icon: "good-tropicalTimber",
     color: "#a45a52",
     value: 7,
@@ -549,7 +586,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Whales",
-    tags: ["food", "aquatic", "fuel"],
+    tags: ["food", "aquatic", "fuel", "raw"],
+    type: "raw",
     icon: "good-whales",
     color: "#7fcdff",
     value: 1,
@@ -561,7 +599,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Sugarcane",
-    tags: ["preservative", "food"],
+    tags: ["preservative", "food", "raw"],
+    type: "raw",
     icon: "good-sugar",
     color: "#7abf87",
     value: 4,
@@ -572,7 +611,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Tea",
-    tags: ["luxury"],
+    tags: ["luxury", "raw"],
+    type: "raw",
     icon: "good-tea",
     color: "#d0f0c0",
     value: 5,
@@ -584,7 +624,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Tobacco",
-    tags: ["luxury"],
+    tags: ["luxury", "raw"],
+    type: "raw",
     icon: "good-tobacco",
     color: "#6D5843",
     value: 5,
@@ -595,7 +636,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Clay",
-    tags: ["mineral", "construction"],
+    tags: ["mineral", "construction", "raw"],
+    type: "raw",
     icon: "good-clay",
     color: "#b07c60",
     value: 1,
@@ -607,7 +649,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "White sand",
-    tags: ["mineral"],
+    tags: ["mineral", "raw"],
+    type: "raw",
     icon: "good-sand",
     color: "#e6d69c",
     value: 1,
@@ -618,7 +661,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Leather",
-    tags: ["clothing", "military"],
+    tags: ["clothing", "military", "manufactured"],
+    type: "manufactured",
     icon: "good-leather",
     color: "#8b5a2b",
     value: 4,
@@ -629,7 +673,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Cloth",
-    tags: ["clothing"],
+    tags: ["clothing", "manufactured"],
+    type: "manufactured",
     icon: "good-cloth",
     color: "#e8e69c",
     value: 4,
@@ -640,7 +685,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Garments",
-    tags: ["clothing"],
+    tags: ["clothing", "manufactured"],
+    type: "manufactured",
     icon: "good-garments",
     color: "#bd21ec",
     value: 9,
@@ -654,7 +700,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Ceramics",
-    tags: ["storage", "construction"],
+    tags: ["storage", "construction", "manufactured"],
+    type: "manufactured",
     icon: "good-ceramics",
     color: "#c1440e",
     value: 6,
@@ -665,7 +712,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Glass",
-    tags: ["storage", "construction"],
+    tags: ["storage", "construction", "manufactured"],
+    type: "manufactured",
     icon: "good-glass",
     color: "#a0c8e8",
     value: 7,
@@ -677,7 +725,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Ropes",
-    tags: ["naval", "construction"],
+    tags: ["naval", "construction", "manufactured"],
+    type: "manufactured",
     icon: "good-ropes",
     color: "#ba9773",
     value: 4,
@@ -688,10 +737,11 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Paper",
-    tags: ["ritual", "educational"],
+    tags: ["ritual", "educational", "manufactured"],
+    type: "manufactured",
     icon: "good-paper",
     color: "#f5f5dc",
-    value: 4,
+    value: 5,
     chance: 0,
     recipes: [{ Hemp: 1 }],
     unit: "ream",
@@ -699,7 +749,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Ink",
-    tags: ["ritual", "educational"],
+    tags: ["ritual", "educational", "manufactured"],
+    type: "manufactured",
     icon: "good-ink",
     color: "#000000",
     value: 5,
@@ -710,10 +761,11 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Books",
-    tags: ["ritual", "educational"],
+    tags: ["ritual", "educational", "manufactured"],
+    type: "manufactured",
     icon: "good-books",
     color: "#deb887",
-    value: 12,
+    value: 13,
     chance: 0,
     recipes: [
       { Paper: 1, Ink: 0.5 },
@@ -725,7 +777,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Sails",
-    tags: ["naval"],
+    tags: ["naval", "manufactured"],
+    type: "manufactured",
     icon: "good-sails",
     color: "#ffffff",
     value: 7,
@@ -736,19 +789,21 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Ships",
-    tags: ["naval"],
+    tags: ["naval", "manufactured"],
+    type: "manufactured",
     icon: "good-ships",
     color: "#654321",
-    value: 20,
+    value: 50,
     chance: 0,
-    recipes: [{ Wood: 2, Sails: 2, Ropes: 2, Tar: 1 }],
+    recipes: [{ Wood: 4, Sails: 4, Ropes: 4, Tar: 2 }],
     unit: "ship",
     demandCoverage: { military: 0.5 },
     multipliers: { cultureType: { Naval: 2 } }
   },
   {
     name: "Boots",
-    tags: ["clothing", "military"],
+    tags: ["clothing", "military", "manufactured"],
+    type: "manufactured",
     icon: "good-boots",
     color: "#654321",
     value: 6,
@@ -759,7 +814,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Harnesses",
-    tags: ["military"],
+    tags: ["military", "manufactured"],
+    type: "manufactured",
     icon: "good-harnesses",
     color: "#a0522d",
     value: 8,
@@ -775,7 +831,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Barrels",
-    tags: ["naval", "storage"],
+    tags: ["naval", "storage", "manufactured"],
+    type: "manufactured",
     icon: "good-barrels",
     color: "#b46e3b",
     value: 3,
@@ -786,7 +843,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Bronze",
-    tags: ["military"],
+    tags: ["military", "manufactured"],
+    type: "manufactured",
     icon: "good-bronze",
     color: "#e46f21",
     value: 9,
@@ -800,7 +858,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Tools",
-    tags: ["construction", "military"],
+    tags: ["construction", "military", "manufactured"],
+    type: "manufactured",
     icon: "good-tools",
     color: "#808080",
     value: 17,
@@ -814,21 +873,23 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Arms",
-    tags: ["military"],
+    tags: ["military", "manufactured"],
+    type: "manufactured",
     icon: "good-arms",
     color: "#333333",
-    value: 22,
+    value: 25,
     chance: 0,
     recipes: [
       { Iron: 0.5, Coal: 1, Leather: 0.5 },
-      { Bronze: 0.5, Coal: 1, Leather: 0.5 }
+      { Bronze: 0.25, Coal: 1, Leather: 0.5 }
     ],
     unit: "set",
     demandCoverage: { military: 1 }
   },
   {
     name: "Gunpowder",
-    tags: ["military"],
+    tags: ["military", "manufactured"],
+    type: "manufactured",
     icon: "good-gunpowder",
     color: "#b0c4de",
     value: 10,
@@ -839,7 +900,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Artillery",
-    tags: ["military"],
+    tags: ["military", "manufactured"],
+    type: "manufactured",
     icon: "good-artillery",
     color: "#cd7f32",
     value: 21,
@@ -853,7 +915,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Coins",
-    tags: ["currency"],
+    tags: ["currency", "manufactured"],
+    type: "manufactured",
     icon: "good-coins",
     color: "#ffd700",
     value: 25,
@@ -867,7 +930,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Jewelry",
-    tags: ["luxury"],
+    tags: ["luxury", "manufactured"],
+    type: "manufactured",
     icon: "good-jewelry",
     color: "#34861b",
     value: 34,
@@ -885,7 +949,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Preserved food",
-    tags: ["food"],
+    tags: ["food", "manufactured"],
+    type: "manufactured",
     icon: "good-salted-fish",
     color: "#c2b280",
     value: 4,
@@ -906,7 +971,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Vinegar",
-    tags: ["food", "preservative"],
+    tags: ["food", "preservative", "manufactured"],
+    type: "manufactured",
     icon: "good-vinegar",
     color: "#9b111e",
     value: 2,
@@ -917,7 +983,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Cheese",
-    tags: ["food"],
+    tags: ["food", "manufactured"],
+    type: "manufactured",
     icon: "good-cheese",
     color: "#f5e1a4",
     value: 4,
@@ -933,7 +1000,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Beer",
-    tags: ["food"],
+    tags: ["food", "manufactured"],
+    type: "manufactured",
     icon: "good-beer",
     color: "#fbb117",
     value: 7,
@@ -947,7 +1015,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Liquor",
-    tags: ["food", "luxury"],
+    tags: ["food", "luxury", "manufactured"],
+    type: "manufactured",
     icon: "good-liquor",
     color: "#8a0303",
     value: 9,
@@ -965,7 +1034,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Candles",
-    tags: ["luxury", "ritual"],
+    tags: ["luxury", "ritual", "manufactured"],
+    type: "manufactured",
     icon: "good-candles",
     color: "#fffacd",
     value: 8,
@@ -976,7 +1046,8 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Soap",
-    tags: ["luxury", "ritual"],
+    tags: ["luxury", "ritual", "manufactured"],
+    type: "manufactured",
     icon: "good-soap",
     color: "#e0e4cc",
     value: 5,
@@ -987,15 +1058,16 @@ const GOODS_DATA: GoodData[] = [
   },
   {
     name: "Perfume",
-    tags: ["luxury", "ritual"],
+    tags: ["luxury", "ritual", "manufactured"],
+    type: "manufactured",
     icon: "good-perfume",
     color: "#ff69b4",
-    value: 18,
+    value: 17,
     chance: 0,
     recipes: [
-      { Olives: 1, Incense: 0.25, Glass: 0.5 },
-      { Olives: 1, Game: 2, Glass: 0.5 },
-      { Liquor: 0.25, Incense: 0.25, Whales: 0.5, Ceramics: 0.5 }
+      { Olives: 1, Incense: 0.5, Glass: 0.5 },
+      { Olives: 1, Game: 3, Glass: 0.5 },
+      { Liquor: 0.25, Incense: 0.5, Whales: 0.5, Ceramics: 0.5 }
     ],
     unit: "bottle",
     demandCoverage: { luxury: 2 }

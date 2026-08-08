@@ -34,7 +34,7 @@ describe("Religions, Erosion, Zones, & Markers Parity", () => {
     expect(zones.length).toBeGreaterThan(0);
     for (const z of zones) {
       expect(z.cells.length).toBeGreaterThan(0);
-      expect(z.color).toContain("rgba");
+      expect(z.color.includes("rgba")).toBe(true);
     }
 
     // 4. Markers
