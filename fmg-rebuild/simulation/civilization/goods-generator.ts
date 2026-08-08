@@ -1171,8 +1171,8 @@ export class GoodsModule {
     return {
       random: (number: number) => number >= 100 || (number > 0 && number / 100 > currentRNG()),
       nth: (number: number) => !(cellId % number),
-      minHabitability: (min: number) => pack.biomes[pack.cells.biome[cellId]].habitability >= min,
-      habitability: () => pack.biomes[this.cells.biome[cellId]].habitability > currentRNG() * 100,
+      minHabitability: (min: number) => (biomesData.habitability[pack.cells.biome[cellId]] ?? 0) >= min,
+      habitability: () => (biomesData.habitability[this.cells.biome[cellId]] ?? 0) > currentRNG() * 100,
       elevation: () => pack.cells.h[cellId] / 100 > currentRNG(),
       biome: (...biomes: number[]) => biomes.includes(pack.cells.biome[cellId]),
       minHeight: (heigh: number) => pack.cells.h[cellId] >= heigh,

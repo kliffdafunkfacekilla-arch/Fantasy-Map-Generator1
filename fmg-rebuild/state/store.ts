@@ -1,10 +1,13 @@
 import { Grid, Pack } from "../core/types";
+import { CalendarState } from "../simulation/time/tick-system";
 
 export interface AppState {
   width: number;
   height: number;
   seed: string;
   cellsDesired: number;
+  tick: number;
+  calendar: CalendarState | null;
   grid: Grid | null;
   heights: Uint8Array | null;
   temp: Float32Array | null;
@@ -27,6 +30,8 @@ class StateStore {
       height: 600,
       seed: "rebuild-seed",
       cellsDesired: 10000,
+      tick: 0,
+      calendar: null,
       grid: null,
       heights: null,
       temp: null,
