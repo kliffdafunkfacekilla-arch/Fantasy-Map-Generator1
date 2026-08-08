@@ -5,8 +5,15 @@ from typing import Dict, List, Optional
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from agents.weather import router as weather_router
+from agents.demographics import router as demographics_router
+from agents.orchestrator import router as orchestrator_router
 
 app = FastAPI(title="Fantasy Map Generator Rebuild API")
+
+app.include_router(weather_router)
+app.include_router(demographics_router)
+app.include_router(orchestrator_router)
 
 app.add_middleware(
     CORSMiddleware,
