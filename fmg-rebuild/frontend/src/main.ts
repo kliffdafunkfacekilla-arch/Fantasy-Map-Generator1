@@ -32,6 +32,7 @@ import { mountExportOptions } from "../../ui/export-options";
 import { mountLanguageEditor } from "../../ui/language-editor";
 import { mountBurgTypeEditor } from "../../ui/burg-type-editor";
 import { mountMilitaryUnitEditor } from "../../ui/military-unit-editor";
+import { mountRouteEditor } from "../../ui/route-editor";
 
 console.log("FMG Full-Stack Rebuild Frontend Initialized.");
 
@@ -152,6 +153,7 @@ if (app) {
           <!-- Editors Mounting Targets -->
           <div id="burgEditorMount"></div>
           <div id="stateEditorMount"></div>
+          <div id="routeEditorMount"></div>
 
         </div>
 
@@ -191,6 +193,10 @@ if (app) {
   mountLanguageEditor("languageMount");
   mountBurgTypeEditor("burgTypeMount");
   mountMilitaryUnitEditor("militaryUnitMount");
+  mountRouteEditor("routeEditorMount", () => {
+    renderCurrentLayer();
+    if (minimapCanvas) drawMinimap(minimapCanvas, store.getState());
+  });
 
   const updateCanvasSize = () => {
     if (!canvas) return;
@@ -374,6 +380,15 @@ if (app) {
     }
 
     const cellId = findClosestCellIndex(clickX, clickY, state.grid.points);
+
+    if (state.routes) {
+      for (const r of state.routes) {
+        if (r.path && r.path.includes(cellId)) {
+          (window as any).openRouteEditor(r);
+          return;
+        }
+      }
+    }
     const sId = state.cellStates ? state.cellStates[cellId] : 0;
     if (sId > 0 && state.states) {
       const activeState = state.states.find((s: any) => s.id === sId);
