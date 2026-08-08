@@ -1,5 +1,6 @@
 import { Grid } from "../../core/types";
 import { createPRNG, PRNG } from "../../core/random";
+import FlatQueue from "flatqueue";
 
 export interface Culture {
   id: number;
@@ -67,7 +68,8 @@ export function generateCultures(
   const centers = candidates.slice(0, actualCount);
 
   // Initialize seeds
-  const queue: { cellId: number; cost: number; cultureId: number }[] = [];
+  const minCost = new Float32Array(pointsN).fill(Infinity);
+  const queue = new FlatQueue<{ cellId: number; cost: number; cultureId: number }>();
   for (let i = 0; i < actualCount; i++) {
     const cultureId = i + 1;
     const center = centers[i];
@@ -78,19 +80,14 @@ export function generateCultures(
       center
     });
     cellCultures[center] = cultureId;
-    queue.push({ cellId: center, cost: 0, cultureId });
+    minCost[center] = 0;
+    queue.push({ cellId: center, cost: 0, cultureId }, 0);
   }
 
   // 2. Dijkstra expansion
-  const minCost = new Float32Array(pointsN).fill(Infinity);
-  for (const q of queue) {
-    minCost[q.cellId] = 0;
-  }
-
   // Simple priority queue loop (Dijkstra)
   while (queue.length > 0) {
-    queue.sort((a, b) => a.cost - b.cost);
-    const curr = queue.shift()!;
+    const curr = queue.pop()!;
 
     if (curr.cost > minCost[curr.cellId]) continue;
 
@@ -103,7 +100,7 @@ export function generateCultures(
       if (nextCost < 120.0 && nextCost < minCost[n]) {
         minCost[n] = nextCost;
         cellCultures[n] = curr.cultureId;
-        queue.push({ cellId: n, cost: nextCost, cultureId: curr.cultureId });
+        queue.push({ cellId: n, cost: nextCost, cultureId: curr.cultureId }, nextCost);
       }
     }
   }

@@ -1,5 +1,6 @@
 import { Grid } from "../../core/types";
 import { Burg } from "./burg-generator";
+import FlatQueue from "flatqueue";
 
 export interface State {
   id: number;
@@ -101,7 +102,7 @@ export function generateStates(
   const sortedBurgs = [...burgs].sort((a, b) => b.population - a.population);
   const actualCount = Math.min(count, sortedBurgs.length);
 
-  const queue: { cellId: number; cost: number; stateId: number; nativeBiome: number; stateType: string }[] = [];
+  const queue = new FlatQueue<{ cellId: number; cost: number; stateId: number; nativeBiome: number; stateType: string }>();
   const minCost = new Float32Array(pointsN).fill(Infinity);
 
   for (let i = 0; i < actualCount; i++) {
@@ -124,13 +125,12 @@ export function generateStates(
     minCost[capitalBurg.cell] = 0;
     
     const nativeBiome = actualBiomes[capitalBurg.cell];
-    queue.push({ cellId: capitalBurg.cell, cost: 0, stateId, nativeBiome, stateType });
+    queue.push({ cellId: capitalBurg.cell, cost: 0, stateId, nativeBiome, stateType }, 0);
   }
 
   // Dijkstra expansion
   while (queue.length > 0) {
-    queue.sort((a, b) => a.cost - b.cost);
-    const curr = queue.shift()!;
+    const curr = queue.pop()!;
 
     if (curr.cost > minCost[curr.cellId]) continue;
 
@@ -160,7 +160,7 @@ export function generateStates(
           stateId: curr.stateId,
           nativeBiome: curr.nativeBiome,
           stateType: curr.stateType
-        });
+        }, nextCost);
       }
     }
   }
