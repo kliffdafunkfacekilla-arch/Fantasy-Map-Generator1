@@ -1,9 +1,10 @@
+import FlatQueue from "flatqueue";
 import { Grid } from "../../core/types";
 import { Burg } from "./burg-generator";
 
 export interface Route {
   id: number;
-  type: "road" | "sea";
+  type: "road" | "trail" | "sea";
   path: number[]; // Cell indices forming the path
 }
 
@@ -30,12 +31,11 @@ export function findPath(
   };
   fScore[start] = heuristic(start, end);
 
-  const openSet = [start];
+  const openSet = new FlatQueue<number>();
+  openSet.push(start, fScore[start]);
 
   while (openSet.length > 0) {
-    // Sort openSet by fScore ascending
-    openSet.sort((a, b) => fScore[a] - fScore[b]);
-    const curr = openSet.shift()!;
+    const curr = openSet.pop()!;
 
     if (curr === end) {
       // Reconstruct path
@@ -79,9 +79,7 @@ export function findPath(
         cameFrom[n] = curr;
         gScore[n] = tentativeG;
         fScore[n] = tentativeG + heuristic(n, end);
-        if (!openSet.includes(n)) {
-          openSet.push(n);
-        }
+        openSet.push(n, fScore[n]);
       }
     }
   }
@@ -113,7 +111,14 @@ export function generateRoutes(
       
       // Determine if they can share a sea lane (both are ports) or road
       const isSea = b1.port > 0 && b2.port > 0;
-      const routeType = isSea ? "sea" : "road";
+      let routeType: Route["type"];
+      if (isSea) {
+        routeType = "sea";
+      } else {
+        // Classify land route as "road" (main road) if both are capitals or large enough, otherwise "trail"
+        const isMain = b1.capital || b2.capital || (b1.population > 1000 && b2.population > 1000);
+        routeType = isMain ? "road" : "trail";
+      }
 
       const path = findPath(grid, heights, b1.cell, b2.cell, isSea ? "sea" : "land");
       if (path && path.length > 2) {

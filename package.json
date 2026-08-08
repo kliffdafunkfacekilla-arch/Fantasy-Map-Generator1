@@ -47,6 +47,7 @@
     "d3": "^7.9.0",
     "delaunator": "^5.0.1",
     "driver.js": "^1.4.0",
+    "flatqueue": "^3.1.0",
     "lineclip": "^2.0.0",
     "polylabel": "^2.0.1",
     "three": "^0.184.0"
