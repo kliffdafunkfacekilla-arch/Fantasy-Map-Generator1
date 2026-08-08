@@ -241,7 +241,7 @@ class StatesModule {
   }
 
   private getHeightCost(h: number, i: number, type: string) {
-    const isHabitableWater = h < 20 && biomesData.habitability[pack.cells.biome[i]] > 0;
+    const isHabitableWater = h < 20 && pack.biomes[pack.cells.biome[i]].habitability > 0;
     if (isHabitableWater) {
       if (type !== "Aquatic") return 3000; // massive penalty for non-aquatics entering the sea
       return 0; // aquatics thrive
@@ -330,7 +330,7 @@ class StatesModule {
         if (cells.state[e] && e === state.center) return; // do not overwrite capital cells
 
         const cultureCost = culture === cells.culture[e] ? -9 : 100;
-        const isHabitableWater = cells.h[e] < 20 && biomesData.habitability[cells.biome[e]] > 0;
+        const isHabitableWater = cells.h[e] < 20 && pack.biomes[cells.biome[e]].habitability > 0;
         const populationCost =
           cells.h[e] < 20 && type !== "Aquatic" && !isHabitableWater
             ? 0
@@ -347,7 +347,7 @@ class StatesModule {
         if (totalCost > growthRate) return;
 
         if (!cost[e] || totalCost < cost[e]) {
-          const isHabitableWater = cells.h[e] < 20 && biomesData.habitability[cells.biome[e]] > 0;
+          const isHabitableWater = cells.h[e] < 20 && pack.biomes[cells.biome[e]].habitability > 0;
           if (cells.h[e] >= 20 || type === "Aquatic" || isHabitableWater) cells.state[e] = s; // assign state to cell
           cost[e] = totalCost;
           queue.push({ e, p: totalCost, s, b }, totalCost);
@@ -368,7 +368,7 @@ class StatesModule {
     const { cells, burgs } = pack;
 
     for (const i of cells.i) {
-      const isHabitableWater = cells.h[i] < 20 && biomesData.habitability[cells.biome[i]] > 0;
+      const isHabitableWater = cells.h[i] < 20 && pack.biomes[cells.biome[i]].habitability > 0;
       if ((cells.h[i] < 20 && pack.states[cells.state[i]]?.type !== "Aquatic" && !isHabitableWater) || cells.burg[i])
         continue; // do not overwrite burgs
       if (pack.states[cells.state[i]]?.lock) continue; // do not overwrite cells of locks states

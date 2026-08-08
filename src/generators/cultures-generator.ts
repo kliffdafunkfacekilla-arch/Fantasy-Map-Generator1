@@ -922,7 +922,7 @@ class CulturesGenerator {
         return "Naval"; // low water cross penalty and high for non-along-coastline growth
       if (this.cells.r[i] && this.cells.fl[i] > 100) return "River"; // no River cross penalty, penalty for non-River growth
       if (this.cells.t[i] > 2 && [3, 7, 8, 9, 10, 12].includes(this.cells.biome[i])) return "Hunting"; // high penalty in non-native biomes
-      const isHabitableWater = this.cells.h[i] < 20 && biomesData.habitability[this.cells.biome[i]] > 0;
+      const isHabitableWater = this.cells.h[i] < 20 && pack.biomes[this.cells.biome[i]].habitability > 0;
       if (isHabitableWater) return "Aquatic";
       const types: CultureType[] = ["Generic", "Hunting", "Highland", "River", "Lake", "Naval", "Nomadic"];
       return ra(types) as CultureType;
@@ -1076,7 +1076,7 @@ class CulturesGenerator {
       const f = pack.features[cells.f[i]],
         a = cells.area[i];
       if (type === "Lake" && f.type === "lake") return 10; // no lake crossing penalty for Lake cultures
-      const isHabitableWater = h < 20 && biomesData.habitability[cells.biome[i]] > 0;
+      const isHabitableWater = h < 20 && pack.biomes[cells.biome[i]].habitability > 0;
       if (isHabitableWater) {
         if (type !== "Aquatic") return a * 100; // massive penalty for non-aquatics entering the sea
         return 0; // aquatics thrive
