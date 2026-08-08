@@ -9,10 +9,117 @@ export interface Burg {
   population: number;
   isCapital: boolean;
   port: number; // 0 if none, or the feature ID of the ocean/lake it ports to
+  harborRating: number;
+  crossroadRating: number;
+  defensiveRating: number;
+  capitalRating: number;
 }
 
 const BURG_NAMES_PREFIX = ["Odin", "Gron", "New", "Old", "Al", "Roth", "Stone", "Black", "Oak", "River"];
 const BURG_NAMES_SUFFIX = ["burg", "grad", "ville", "ton", "ford", "port", "shire", "field", "wood", "crag"];
+
+export function calculateHarborRating(grid: Grid, heights: Uint8Array, cellId: number): number {
+  if (heights[cellId] < 20) return 0; // Not on land
+
+  let waterNeighbors = 0;
+  let landNeighbors = 0;
+
+  for (const n of grid.cells.c[cellId]) {
+    if (heights[n] < 20) waterNeighbors++;
+    else landNeighbors++;
+  }
+
+  // A protected cove or inlet has many land neighbors and some water neighbors
+  if (waterNeighbors > 0 && landNeighbors >= waterNeighbors) {
+    return waterNeighbors * 2.0; // good harbor
+  }
+
+  return waterNeighbors > 0 ? 1.0 : 0.0;
+}
+
+export function calculateCrossroadRating(grid: Grid, heights: Uint8Array, biomes: Uint8Array, cellId: number): number {
+  if (heights[cellId] < 20) return 0;
+
+  const h = heights[cellId];
+  let rating = 0;
+
+  // Flat areas are good crossroads
+  if (h >= 20 && h < 50) rating += 3.0;
+
+  // Passes between mountains
+  let highNeighbors = 0;
+  let lowNeighbors = 0;
+  for (const n of grid.cells.c[cellId]) {
+    if (heights[n] >= 70) highNeighbors++;
+    else if (heights[n] < 50 && heights[n] >= 20) lowNeighbors++;
+  }
+
+  if (highNeighbors > 0 && lowNeighbors > 0) rating += 4.0; // valley or pass
+
+  // Habitability multiplier
+  if (biomes[cellId] >= 4 && biomes[cellId] <= 9) rating += 2.0;
+
+  return rating;
+}
+
+export function calculateDefensiveRating(grid: Grid, heights: Uint8Array, cellId: number): number {
+  if (heights[cellId] < 20) return 0;
+
+  let rating = 0;
+  const h = heights[cellId];
+
+  // Elevated positions
+  if (h > 60) rating += 4.0;
+  else if (h > 40) rating += 2.0;
+
+  // Natural choke points (peninsulas, surrounded by mountains/water)
+  let impassableNeighbors = 0;
+  for (const n of grid.cells.c[cellId]) {
+    if (heights[n] < 20 || heights[n] > 80) impassableNeighbors++;
+  }
+
+  rating += impassableNeighbors * 1.5;
+
+  return rating;
+}
+
+export function calculateCapitalRating(
+  grid: Grid,
+  heights: Uint8Array,
+  biomes: Uint8Array,
+  rivers: Uint16Array,
+  flux: Float32Array,
+  cellId: number
+): number {
+  if (heights[cellId] < 20) return 0;
+
+  let rating = 0;
+
+  // Centrality/Habitability (temperate biomes)
+  const biome = biomes[cellId];
+  if (biome === 6 || biome === 8) rating += 5.0; // Temperate forests
+  else if (biome >= 4 && biome <= 9) rating += 3.0; // Other habitable
+
+  // Water access
+  if (rivers[cellId] > 0) rating += 3.0;
+  if (flux && flux[cellId] > 50.0) rating += 3.0;
+
+  let isCoast = false;
+  for (const n of grid.cells.c[cellId]) {
+    if (heights[n] < 20) {
+      isCoast = true;
+      break;
+    }
+  }
+  if (isCoast) rating += 4.0;
+
+  // Flat/buildable terrain
+  const h = heights[cellId];
+  if (h >= 20 && h < 50) rating += 3.0;
+
+  return rating;
+}
+
 
 export function calculateSuitability(
   grid: Grid,
@@ -54,6 +161,14 @@ export function calculateSuitability(
         cellScore += 5.0;
       }
     }
+
+    // 4. Integrations of Rating Equations
+    const harborRating = calculateHarborRating(grid, heights, i);
+    const crossroadRating = calculateCrossroadRating(grid, heights, biomes, i);
+    const defensiveRating = calculateDefensiveRating(grid, heights, i);
+    const capitalRating = calculateCapitalRating(grid, heights, biomes, rivers, flux, i);
+
+    cellScore += harborRating * 0.5 + crossroadRating * 0.3 + defensiveRating * 0.2 + capitalRating * 0.4;
 
     score[i] = Math.max(0, cellScore);
   }
@@ -119,6 +234,11 @@ export function generateBurgs(
     const pref = BURG_NAMES_PREFIX[Math.floor(Math.random() * BURG_NAMES_PREFIX.length)];
     const suff = BURG_NAMES_SUFFIX[Math.floor(Math.random() * BURG_NAMES_SUFFIX.length)];
 
+    const harborRating = calculateHarborRating(grid, heights, cellId);
+    const crossroadRating = calculateCrossroadRating(grid, heights, biomes, cellId);
+    const defensiveRating = calculateDefensiveRating(grid, heights, cellId);
+    const capitalRating = calculateCapitalRating(grid, heights, biomes, rivers, flux, cellId);
+
     burgs.push({
       id: nextBurgId++,
       cell: cellId,
@@ -127,7 +247,11 @@ export function generateBurgs(
       name: `${pref}${suff}`,
       population: Math.round(1000 + candidate.score * 500 + Math.random() * 2000),
       isCapital: false,
-      port
+      port,
+      harborRating,
+      crossroadRating,
+      defensiveRating,
+      capitalRating
     });
   }
 
