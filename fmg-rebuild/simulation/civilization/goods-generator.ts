@@ -16,7 +16,8 @@ const pack = {
     r: new Uint16Array(0),
     fl: new Float32Array(0)
   },
-  features: [] as any[]
+  features: [] as any[],
+  biomes: Array.from({ length: 256 }, () => ({ habitability: 50 }))
 };
 const grid = {
   cells: {
