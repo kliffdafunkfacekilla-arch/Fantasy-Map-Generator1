@@ -5,6 +5,7 @@ const TIME = false;
 const seed = "map-seed";
 const pack = {
   goods: [] as any[],
+  biomes: Array.from({ length: 20 }, () => ({ habitability: 50 })),
   cells: {
     i: [] as number[],
     good: new Uint16Array(0),
