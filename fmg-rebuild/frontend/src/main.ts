@@ -94,7 +94,7 @@ if (app) {
       Generating Map Simulation...
     </div>
 
-    <!-- Collapsible Options & Tools Menu Overlay -->
+        <!-- Collapsible Options & Tools Menu Overlay -->
     <div id="optionsContainer" style="position: absolute; top: 10px; left: 10px; z-index: 10; display: flex; flex-direction: column; width: 320px; max-height: 90vh; pointer-events: none; font-family: 'Outfit', 'Inter', sans-serif;">
       
       <!-- Collapsible trigger -->
@@ -104,26 +104,25 @@ if (app) {
 
       <!-- Menu panel -->
       <div id="options" style="display: none; flex-direction: column; background: rgba(30, 30, 38, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; overflow: hidden; pointer-events: auto; max-height: 85vh; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-width: 280px; max-width: 340px;">
-        
+        <div id="drag-trigger" data-tip="Drag to move the Menu" style="height: 12px; background: rgba(255,255,255,0.1); cursor: move; width: 100%;"></div>
         <!-- Tabs headers -->
         <div class="tab" style="display: flex; background: rgba(0, 0, 0, 0.3); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
           <button id="optionsHide" class="options" style="background: transparent; color: #ef4444; border: none; padding: 0.8rem; font-weight: bold; cursor: pointer; font-size: 1.1rem;">◄</button>
-          <button id="optionsTab" class="tablinks active" style="flex: 1; padding: 0.8rem 0.1rem; background: transparent; border: none; color: #e2e8f0; font-weight: 600; cursor: pointer; font-size: 0.8rem; border-bottom: 2px solid #3b82f6;">Options</button>
-          <button id="layersTab" class="tablinks" style="flex: 1; padding: 0.8rem 0.1rem; background: transparent; border: none; color: #94a3b8; font-weight: 600; cursor: pointer; font-size: 0.8rem; border-bottom: 2px solid transparent;">Layers</button>
+          <button id="layersTab" class="tablinks active" style="flex: 1; padding: 0.8rem 0.1rem; background: transparent; border: none; color: #e2e8f0; font-weight: 600; cursor: pointer; font-size: 0.8rem; border-bottom: 2px solid #3b82f6;">Layers</button>
           <button id="styleTab" class="tablinks" style="flex: 1; padding: 0.8rem 0.1rem; background: transparent; border: none; color: #94a3b8; font-weight: 600; cursor: pointer; font-size: 0.8rem; border-bottom: 2px solid transparent;">Style</button>
+          <button id="optionsTab" class="tablinks" style="flex: 1; padding: 0.8rem 0.1rem; background: transparent; border: none; color: #94a3b8; font-weight: 600; cursor: pointer; font-size: 0.8rem; border-bottom: 2px solid transparent;">Options</button>
           <button id="toolsTab" class="tablinks" style="flex: 1; padding: 0.8rem 0.1rem; background: transparent; border: none; color: #94a3b8; font-weight: 600; cursor: pointer; font-size: 0.8rem; border-bottom: 2px solid transparent;">Tools</button>
+          <button id="aboutTab" class="tablinks" style="flex: 1; padding: 0.8rem 0.1rem; background: transparent; border: none; color: #94a3b8; font-weight: 600; cursor: pointer; font-size: 0.8rem; border-bottom: 2px solid transparent;">About</button>
         </div>
 
         <!-- Options Tab Content -->
-        <div id="optionsContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
+        <div id="optionsContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
           <h4 style="margin: 0; color: #fbbf24; font-size: 0.95rem;">World Setup</h4>
           <div id="configuratorMount"></div>
           <div id="importerMount"></div>
           <div id="exporterMount"></div>
           
-          <h4 style="margin: 0.5rem 0 0 0; color: #fbbf24; font-size: 0.95rem;">Calendar Options</h4>
-          <button id="openCalendarEditorBtn" style="width: 100%; text-align: left; background: #2563eb; border: none; color: white; padding: 0.35rem 0.6rem; cursor: pointer; font-weight: bold; font-size: 0.8rem; border-radius: 4px;">📅 Config Custom Calendar</button>
-          <div id="calendarMount"></div>
+
 
           <h4 style="margin: 0.5rem 0 0 0; color: #fbbf24; font-size: 0.95rem;">Time Controls</h4>
           <div style="display: flex; gap: 0.4rem; margin-bottom: 0.5rem;">
@@ -140,7 +139,7 @@ if (app) {
         </div>
 
         <!-- Layers Content -->
-        <div id="layersContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
+        <div id="layersContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
           <h4 style="margin: 0; color: #3b82f6; font-size: 0.95rem;">Layers Preset</h4>
           <select id="layersPreset" style="width: 100%; padding: 0.4rem; background: #0f0f12; border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; cursor: pointer;">
             <option value="states" selected>Political Map</option>
@@ -160,29 +159,72 @@ if (app) {
           </div>
         </div>
 
-        <!-- Style Content -->
+                        <!-- Style Content -->
         <div id="styleContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
-            <div id="styleEditorMount"></div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <p data-tip="Select a style preset. State labels may required regeneration if font is changed" style="margin: 0; display: inline-block; color: #94a3b8; font-size: 0.85rem;">Style preset:</p>
+            <div style="display: flex; gap: 0.4rem;">
+              <select data-tip="Select a style preset" id="stylePreset" onchange="if(window.requestStylePresetChange) window.requestStylePresetChange(this.value)" style="flex: 1; padding: 0.25rem; background: #0f0f12; border: 1px solid #444; color: white; border-radius: 4px; cursor: pointer; text-transform: capitalize;">
+                <option value="default">Default</option>
+                <option value="monochrome">Monochrome</option>
+                <option value="clean">Clean</option>
+              </select>
+              <button id="addStyleButton" data-tip="Click to save current style as a new preset" class="icon-plus sideButton" style="display: inline-block; background: #3b82f6; border: none; color: white; border-radius: 4px; padding: 0.25rem 0.5rem; cursor: pointer;">+</button>
+              <button id="removeStyleButton" data-tip="Click to remove current custom style preset" class="icon-minus sideButton" style="display: none; background: #ef4444; border: none; color: white; border-radius: 4px; padding: 0.25rem 0.5rem; cursor: pointer;">-</button>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <p data-tip="Select an element to edit its style" style="margin: 0; display: inline-block; color: #94a3b8; font-size: 0.85rem;">Select element:</p>
+            <select data-tip="Select an element to edit its style" id="styleElementSelect" onchange="if(window.requestStyleElementChange) window.requestStyleElementChange(this.value)" style="width: 100%; padding: 0.25rem; background: #0f0f12; border: 1px solid #444; color: white; border-radius: 4px; cursor: pointer;">
+              <option value="biomes">Biomes</option>
+              <option value="borders">Borders</option>
+              <option value="burgIcons">Burg Icons</option>
+              <option value="coastline">Coastline</option>
+              <option value="cultures">Cultures</option>
+              <option value="grid">Grid</option>
+              <option value="heightmap">Heightmap</option>
+              <option value="labels">Labels</option>
+              <option value="markers">Markers</option>
+              <option value="military">Military</option>
+              <option value="provinces">Provinces</option>
+              <option value="religions">Religions</option>
+              <option value="rivers">Rivers</option>
+              <option value="routes">Routes</option>
+              <option value="states" selected>States</option>
+              <option value="zones">Zones</option>
+            </select>
+          </div>
+
+          <!-- Original mount point for specific element style editor -->
+          <div id="styleEditorMount" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem;"></div>
         </div>
 
         <!-- Tools Tab Content -->
-        <div id="toolsContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
-          <h4 style="margin: 0; color: #10b981; font-size: 0.95rem;">Interactive Editors</h4>
-          
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; margin-bottom: 0.4rem;">
-            <button id="btnOpenHeightmap" style="background: #eab308; color: black; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">⛰️ Heightmap</button>
-            <button id="btnOpenStates" style="background: #3b82f6; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">👑 States</button>
-            <button id="btnOpenDiplomacy" style="background: #a855f7; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🤝 Diplomacy</button>
-            <button id="btnOpenRoutes" style="background: #f97316; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🛤️ Routes</button>
-            <button id="btnOpenLabels" style="background: #10b981; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🏷️ Labels</button>
-            <button id="btnOpenLanguages" style="background: #6366f1; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🗣️ Languages</button>
-            <button id="btnOpenBiomes" style="background: #14b8a6; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🍃 Biomes</button>
-            <button id="btnOpenMarkers" style="background: #f43f5e; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">📍 Markers</button>
-            <button id="btnOpenMagic" style="background: #8b5cf6; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🔮 Magic</button>
-            <button id="btnOpenEcology" style="background: #22c55e; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🦊 Ecology</button>
+                        <div id="toolsContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
+          <div class="separator" style="color: #10b981; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.2rem; margin-bottom: 0.4rem;">Edit</div>
+          <div class="grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-bottom: 0.8rem;">
+            <button id="btnOpenBiomes" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Biomes</button>
+            <button id="btnOpenBurgs" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Burgs</button>
+            <button id="openCalendarEditorBtn" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Calendar</button>
+            <button id="btnOpenCultures" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Cultures</button>
+            <button id="btnOpenDiplomacy" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Diplomacy</button>
+            <button id="btnOpenEcology" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Ecology</button>
+            <button id="btnOpenHeightmap" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Heightmap</button>
+            <button id="btnOpenLabels" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Labels</button>
+            <button id="btnOpenLanguages" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Languages</button>
+            <button id="btnOpenMagic" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Magic</button>
+            <button id="btnOpenMarkers" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Markers</button>
+            <button id="btnOpenProvinces" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Provinces</button>
+            <button id="btnOpenReligions" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Religions</button>
+            <button id="btnOpenRoutes" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Routes</button>
+            <button id="btnOpenStates" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">States</button>
+            <button id="btnOpenUnits" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Units</button>
+            <button id="btnOpenZones" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Zones</button>
           </div>
 
           <!-- Popup Mounts (Hidden by default; popped up on button click) -->
+          <div id="calendarMount"></div>
           <div id="heightmapEditorMount"></div>
           <div id="burgEditorMount"></div>
           <div id="stateEditorMount"></div>
@@ -196,6 +238,22 @@ if (app) {
           <div id="languageMount"></div>
           <div id="burgTypeMount"></div>
           <div id="militaryUnitMount"></div>
+        </div>
+
+        <!-- About Tab Content -->
+        <div id="aboutContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
+          <h4 style="margin: 0; color: #fbbf24; font-size: 0.95rem;">About</h4>
+          <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.4;">
+            This is the rebuilt full-stack version of Azgaar's Fantasy Map Generator. It features a modern modular architecture, high-performance rendering, and a collaborative multiplayer backend.
+          </p>
+          <div style="background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+            <ul style="color: #cbd5e1; font-size: 0.8rem; margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li><strong>UI:</strong> Vanilla TS + Custom Component Pattern</li>
+              <li><strong>State:</strong> Centralized Store (SoA pattern)</li>
+              <li><strong>Renderer:</strong> GPU Canvas + Three.js</li>
+              <li><strong>Backend:</strong> Python FastAPI + Multiplayer Sync</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -276,92 +334,41 @@ if (app) {
   });
 
   // Bind Interactive Editors button group click listeners
-  const btnOpenHeightmap = document.getElementById("btnOpenHeightmap");
-  const btnOpenStates = document.getElementById("btnOpenStates");
-  const btnOpenDiplomacy = document.getElementById("btnOpenDiplomacy");
-  const btnOpenRoutes = document.getElementById("btnOpenRoutes");
-  const btnOpenLabels = document.getElementById("btnOpenLabels");
-  const btnOpenLanguages = document.getElementById("btnOpenLanguages");
-  const btnOpenBiomes = document.getElementById("btnOpenBiomes");
-  const btnOpenMarkers = document.getElementById("btnOpenMarkers");
-  const btnOpenMagic = document.getElementById("btnOpenMagic");
-  const btnOpenEcology = document.getElementById("btnOpenEcology");
+  // Wire Tools Grid Buttons
+  const tools = [
+    { id: "btnOpenBiomes", fn: "openBiomesEditor" },
+    { id: "btnOpenBurgs", fn: "openBurgsOverview" },
+    { id: "openCalendarEditorBtn", fn: "openCalendarEditor" },
+    { id: "btnOpenCultures", fn: "openCulturesEditor" },
+    { id: "btnOpenDiplomacy", fn: "openDiplomacyEditor" },
+    { id: "btnOpenHeightmap", func: () => { const w = window as any; if(w.triggerLayerSelect) w.triggerLayerSelect('heightmap'); const p = document.getElementById('hmPaintSection'); if(p && p.parentElement) p.parentElement.style.display='flex'; } },
+    { id: "btnOpenLabels", func: () => { const w = window as any; if(w.triggerLayerSelect) w.triggerLayerSelect('states'); const p = document.getElementById('labelEditorPanel'); if(p) p.style.display='block'; } },
+    { id: "btnOpenLanguages", func: () => { const p = document.getElementById('languageEditorPanel'); if(p) p.style.display='block'; } },
+    { id: "btnOpenMarkers", fn: "openMarkersEditor" },
+    { id: "btnOpenProvinces", fn: "openProvincesEditor" },
+    { id: "btnOpenReligions", fn: "openReligionsEditor" },
+    { id: "btnOpenRoutes", func: () => { const w = window as any; if(w.triggerLayerSelect) w.triggerLayerSelect('states'); const p = document.getElementById('routeEditorPanel'); if(p) p.style.display='block'; } },
+    { id: "btnOpenStates", fn: "openStatesList" },
+    { id: "btnOpenUnits", func: () => { const p = document.getElementById('militaryUnitEditorPanel'); if(p) p.style.display='block'; } },
+    { id: "btnOpenZones", fn: "openZonesEditor" },
+    { id: "btnOpenMagic", fn: "openMagicEditor" },
+    { id: "btnOpenEcology", fn: "openEcologyEditor" }
+  ];
 
-  if (btnOpenHeightmap) {
-    btnOpenHeightmap.addEventListener("click", () => {
-      const win = window as any;
-      if (win.triggerLayerSelect) win.triggerLayerSelect("heightmap");
-      const editorPanel = document.getElementById("hmPaintSection")?.parentElement;
-      if (editorPanel) editorPanel.style.display = "flex";
-    });
-  }
+  tools.forEach(t => {
+    const btn = document.getElementById(t.id);
+    if (btn) {
+      btn.addEventListener("click", () => {
+        if (t.func) {
+          t.func();
+        } else if (t.fn) {
+          const win = window as any;
+          if (win[t.fn]) win[t.fn]();
+        }
+      });
+    }
+  });
 
-  if (btnOpenStates) {
-    btnOpenStates.addEventListener("click", () => {
-      const win = window as any;
-      if (win.openStatesList) win.openStatesList();
-    });
-  }
-
-  if (btnOpenDiplomacy) {
-    btnOpenDiplomacy.addEventListener("click", () => {
-      const win = window as any;
-      if (win.openDiplomacyEditor) win.openDiplomacyEditor();
-    });
-  }
-
-  if (btnOpenRoutes) {
-    btnOpenRoutes.addEventListener("click", () => {
-      const win = window as any;
-      if (win.triggerLayerSelect) win.triggerLayerSelect("states");
-      const editorPanel = document.getElementById("routeEditorPanel");
-      if (editorPanel) editorPanel.style.display = "block";
-    });
-  }
-
-  if (btnOpenLabels) {
-    btnOpenLabels.addEventListener("click", () => {
-      const win = window as any;
-      if (win.triggerLayerSelect) win.triggerLayerSelect("states");
-      const editorPanel = document.getElementById("labelEditorPanel");
-      if (editorPanel) editorPanel.style.display = "block";
-    });
-  }
-
-  if (btnOpenLanguages) {
-    btnOpenLanguages.addEventListener("click", () => {
-      const editorPanel = document.getElementById("languageEditorPanel");
-      if (editorPanel) editorPanel.style.display = "block";
-    });
-  }
-
-  if (btnOpenBiomes) {
-    btnOpenBiomes.addEventListener("click", () => {
-      const win = window as any;
-      if (win.openBiomesEditor) win.openBiomesEditor();
-    });
-  }
-
-  if (btnOpenMarkers) {
-    btnOpenMarkers.addEventListener("click", () => {
-      const win = window as any;
-      if (win.openMarkersEditor) win.openMarkersEditor();
-    });
-  }
-
-  if (btnOpenMagic) {
-    btnOpenMagic.addEventListener("click", () => {
-      const win = window as any;
-      if (win.openMagicEditor) win.openMagicEditor();
-    });
-  }
-
-  if (btnOpenEcology) {
-    btnOpenEcology.addEventListener("click", () => {
-      const win = window as any;
-      if (win.openEcologyEditor) win.openEcologyEditor();
-    });
-  }
 
   // Mount Custom Calendar Editor
   mountCalendarEditor("calendarMount", () => {
@@ -508,9 +515,41 @@ if (app) {
     });
   }
 
+
+  // Make the options menu draggable
+  const optionsContainer = document.getElementById("optionsContainer");
+  const dragTrigger = document.getElementById("drag-trigger");
+
+  if (optionsContainer && dragTrigger) {
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    dragTrigger.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      const rect = optionsContainer.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      document.body.style.userSelect = "none";
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        optionsContainer.style.left = `${e.clientX - offsetX}px`;
+        optionsContainer.style.top = `${e.clientY - offsetY}px`;
+      }
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+      document.body.style.userSelect = "";
+    });
+  }
+
   // Wire up Tab switching
-  const tabs = ["optionsTab", "layersTab", "styleTab", "toolsTab"];
-  const contents = ["optionsContent", "layersContent", "styleContent", "toolsContent"];
+
+  const tabs = ["optionsTab", "layersTab", "styleTab", "toolsTab", "aboutTab"];
+  const contents = ["optionsContent", "layersContent", "styleContent", "toolsContent", "aboutContent"];
 
   tabs.forEach((tabId, idx) => {
     const tabBtn = document.getElementById(tabId) as HTMLButtonElement;
