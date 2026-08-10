@@ -166,20 +166,25 @@ if (app) {
         </div>
 
         <!-- Tools Tab Content -->
-        <div id="toolsContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
-          <h4 style="margin: 0; color: #10b981; font-size: 0.95rem;">Interactive Editors</h4>
-          
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; margin-bottom: 0.4rem;">
-            <button id="btnOpenHeightmap" style="background: #eab308; color: black; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">⛰️ Heightmap</button>
-            <button id="btnOpenStates" style="background: #3b82f6; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">👑 States</button>
-            <button id="btnOpenDiplomacy" style="background: #a855f7; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🤝 Diplomacy</button>
-            <button id="btnOpenRoutes" style="background: #f97316; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🛤️ Routes</button>
-            <button id="btnOpenLabels" style="background: #10b981; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🏷️ Labels</button>
-            <button id="btnOpenLanguages" style="background: #6366f1; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🗣️ Languages</button>
-            <button id="btnOpenBiomes" style="background: #14b8a6; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🍃 Biomes</button>
-            <button id="btnOpenMarkers" style="background: #f43f5e; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">📍 Markers</button>
-            <button id="btnOpenMagic" style="background: #8b5cf6; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🔮 Magic</button>
-            <button id="btnOpenEcology" style="background: #22c55e; color: white; border: none; padding: 0.35rem; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;">🦊 Ecology</button>
+                <div id="toolsContent" class="tabcontent" style="padding: 1rem; overflow-y: auto; display: none; flex-direction: column; gap: 0.8rem; box-sizing: border-box;">
+          <div class="separator" style="color: #10b981; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.2rem; margin-bottom: 0.4rem;">Edit</div>
+          <div class="grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-bottom: 0.8rem;">
+            <button id="btnOpenBiomes" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Biomes</button>
+            <button id="btnOpenBurgs" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Burgs</button>
+            <button id="btnOpenCultures" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Cultures</button>
+            <button id="btnOpenDiplomacy" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Diplomacy</button>
+            <button id="btnOpenEcology" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Ecology</button>
+            <button id="btnOpenHeightmap" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Heightmap</button>
+            <button id="btnOpenLabels" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Labels</button>
+            <button id="btnOpenLanguages" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Languages</button>
+            <button id="btnOpenMagic" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Magic</button>
+            <button id="btnOpenMarkers" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Markers</button>
+            <button id="btnOpenProvinces" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Provinces</button>
+            <button id="btnOpenReligions" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Religions</button>
+            <button id="btnOpenRoutes" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Routes</button>
+            <button id="btnOpenStates" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">States</button>
+            <button id="btnOpenUnits" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Units</button>
+            <button id="btnOpenZones" style="background: var(--bg-lighter, rgba(255,255,255,0.1)); border: none; color: white; padding: 0.4rem; border-radius: 4px; cursor: pointer;">Zones</button>
           </div>
 
           <!-- Popup Mounts (Hidden by default; popped up on button click) -->
@@ -197,7 +202,6 @@ if (app) {
           <div id="burgTypeMount"></div>
           <div id="militaryUnitMount"></div>
         </div>
-      </div>
     </div>
 
     <!-- Right HUD File Actions -->
