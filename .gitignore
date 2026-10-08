@@ -11,4 +11,7 @@
 /_bmad-output
 /memory
 .github/agents/bmad-*
-.github/prompts/bmad-*
+.github/prompts/bmad-*# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
