@@ -23,85 +23,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Models
-class Cell(BaseModel):
-    id: int
-    x: float
-    y: float
-    height: float
-    biome: str
-    temperature: float
-    precipitation: float
-    state_id: Optional[int] = None
-    culture_id: Optional[int] = None
-
-class MapState(BaseModel):
-    seed: str
-    width: int
-    height: int
-    cells: List[Cell]
+from simulation.core.models import MapState, Cell
+from simulation.pipeline import SimulationPipeline
 
 # In-memory database of active maps
 active_maps: Dict[str, MapState] = {}
+simulation_pipeline = SimulationPipeline()
 
 def generate_procedural_map(seed: str, width: int, height: int, num_cells: int = 2000) -> MapState:
     """
-    Generates a procedural map layout. Uses a simple seeded distribution of cells
-    with noise-based heightmaps, temperatures, and biomes.
+    Generates a procedural map layout by running the modular simulation pipeline.
     """
-    random.seed(seed)
-    cells = []
-    
-    # Generate points representing cell centers (Voronoi site mocks)
-    for i in range(num_cells):
-        x = random.uniform(0, width)
-        y = random.uniform(0, height)
-        
-        # Simulating radial/island noise for height
-        dx = x - width / 2
-        dy = y - height / 2
-        dist = math.sqrt(dx*dx + dy*dy)
-        max_dist = math.sqrt((width/2)**2 + (height/2)**2)
-        radial_factor = 1.0 - (dist / max_dist) if max_dist > 0 else 0
-        
-        # High-frequency noise simulation
-        noise = (math.sin(x * 0.05) + math.cos(y * 0.05) + random.uniform(-0.2, 0.2)) / 3.0
-        height_val = max(0.0, min(1.0, radial_factor * 0.6 + noise * 0.4 + 0.2))
-        
-        # Climate simulation (temperature decreases with latitude/y coordinate)
-        lat_factor = 1.0 - (y / height) if height > 0 else 0.5
-        temp = 25 * math.sin(lat_factor * math.pi) + random.uniform(-2, 2)
-        
-        # Precipitation
-        prec = max(0.0, 100 * (math.sin(x * 0.01) * math.cos(y * 0.01) + 1.0) / 2.0 + random.uniform(-10, 10))
-        
-        # Define simple biomes
-        if height_val < 0.25:
-            biome = "Marine"
-        elif height_val < 0.3:
-            biome = "Wetland" if prec > 40 else "Sandy Desert"
-        elif temp < 0:
-            biome = "Tundra"
-        elif prec > 60:
-            biome = "Rainforest"
-        elif prec < 20:
-            biome = "Badlands"
-        else:
-            biome = "Grassland"
-            
-        cells.append(
-            Cell(
-                id=i,
-                x=x,
-                y=y,
-                height=height_val,
-                biome=biome,
-                temperature=temp,
-                precipitation=prec
-            )
-        )
-        
-    return MapState(seed=seed, width=width, height=height, cells=cells)
+    return simulation_pipeline.run_all(seed=seed, width=width, height=height, num_cells=num_cells)
 
 # Real-time WebSocket connection manager for multiplayer sync
 class ConnectionManager:
